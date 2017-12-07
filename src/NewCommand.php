@@ -44,7 +44,7 @@ class NewCommand extends Command
         ->dbuser($input, $output)
         ->dbpassword($input, $output)
         ->protocol($input, $output)
-        ->domain($input, $ouput);
+        ->domain($input, $output);
 
       var_dump($this->options);
       /*
