@@ -49,6 +49,8 @@ class NewCommand extends Command
      */
     protected function install()
     {
+      exec("mv  ".getcwd()."/drupal-master/* ".getcwd());
+      rmdir(getcwd()."/drupal-master");
       exec(getcwd().'/. ib3installer');
     }
     /**
@@ -80,7 +82,7 @@ class NewCommand extends Command
      */
     protected function download($zipFile)
     {
-        $response = (new Client)->get('https://github.com/ib3ltd/ib3_dist/archive/master.zip');
+        $response = (new Client)->get('https://github.com/ib3ltd/drupal/archive/master.zip');
         file_put_contents($zipFile, $response->getBody());
         return $this;
     }
