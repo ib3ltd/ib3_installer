@@ -40,7 +40,7 @@ class NewCommand extends Command
       $this->options['name'] = $input->getArgument('name');
       $this
         ->environment($input, $output)
-        ->dname($input, $output)
+        ->dbname($input, $output)
         ->dbuser($input, $output)
         ->dbpassword($input, $output)
         ->protocol($input, $output)
