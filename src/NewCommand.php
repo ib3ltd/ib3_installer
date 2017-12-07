@@ -51,7 +51,7 @@ class NewCommand extends Command
     protected function install($name)
     {
       $working_directory = getcwd().'/'.$name.'/';
-      chdir(working_directory);
+      chdir($working_directory);
       $mv_from_zip = new Process('mv drupal-master/* .', $working_directory);
       $mv_from_zip->run();
       $mv_editorconfig_from_zip = new Process('mv drupal-master/.editorconfig .editorconfig', $working_directory);
