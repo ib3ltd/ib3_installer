@@ -46,18 +46,36 @@ class NewCommand extends Command
         ->protocol($input, $output)
         ->domain($input, $output);
 
-      var_dump($this->options);
-      /*
-      $this->verifyWebsiteDoesntExist(
-        $directory = getcwd().'/'.$input->getArgument('name')
-      );
-      $output->writeln('<info>Keep shitting them out...</info>');
+      $this->options['working_directory'] = getcwd().'/'.$this->options['name'];
+
+      $output->writeln('<comment>Negotiating bananas with the Monkey Lord...</comment>');
+      $this->verifyWebsiteDoesntExist();
+
+      $output->writeln('<comment>Fetching the thing that does the thing...</comment>');
       $this->download($zipFile = $this->makeFilename())
-        ->extract($zipFile, $directory)
-        ->cleanUp($zipFile)
-        ->install($input->getArgument('name'));
+        ->extract($zipFile, $this->options['working_directory'])
+        ->cleanUp($zipFile);
+
+      $output->writeln('<comment>Moving the stuff that the thing put in the wrong place...</comment>');
+      $this->moveZipContents();
+
+      $output->writeln('<comment>Running all the other stuff...</comment>');
+
       $output->writeln('<comment>Website ready! Build something.</comment>');
       */
+    }
+    /**
+     * Move the zip contents out of the sub folder
+     *
+     * @return void
+     */
+    protected function moveZipContents()
+    {
+      chdir($this->options['working_directory']);
+      passthru('mv drupal-master/* .');
+      passthru('mv drupal-master/.editorconfig .editorconfig');
+      passthru('mv drupal-master/.gitignore .gitignore');
+      @rmdir('drupal-master');
     }
     /**
      * What is the domain name.
@@ -172,9 +190,9 @@ class NewCommand extends Command
      * @param  string  $directory
      * @return void
      */
-    protected function verifyWebsiteDoesntExist($directory)
+    protected function verifyWebsiteDoesntExist()
     {
-      if (is_dir($directory)) {
+      if (is_dir($this->options['working_directory'])) {
         throw new RuntimeException('Website already exists!');
       }
     }
