@@ -5,6 +5,7 @@ use ZipArchive;
 use RuntimeException;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,7 +34,17 @@ class NewCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-      $this->environment($input, $output);
+      $options [
+        'name' => $input->getArgument('name'),
+        'environment' => $this->environment($input, $output),
+        'dbname' => $this->dbname($input, $output),
+        'dbuser' => $this->dbuser($input, $output),
+        'dbpassword' => $this->dbpassword($input, $output),
+        'protocol' => $this->protocol($input, $output),
+        'domain' => $this->domain($input, $output),
+      ];
+
+      var_dump($options);
       /*
       $this->verifyWebsiteDoesntExist(
         $directory = getcwd().'/'.$input->getArgument('name')
@@ -47,7 +58,104 @@ class NewCommand extends Command
       */
     }
     /**
-     * Get it installed.
+     * What is the domain name.
+     *
+     * @return void
+     */
+    protected function domain($input, $output)
+    {
+      $helper = $this->getHelper('question');
+      $question = new Question('What is the domain name (www.example.com)');
+      $question->setValidator(function ($answer) {
+        if (!is_string($answer) || strlen($answer) == 0) {
+          throw new \RuntimeException(
+            'Enter a valid domain name'
+          );
+        }
+        return $answer;
+      });
+      $dbpassword = $helper->ask($input, $output, $question);
+      return $dbpassword;
+    }
+    /**
+     * What is the domain protocol.
+     *
+     * @return void
+     */
+    protected function protocol($input, $output)
+    {
+      $helper = $this->getHelper('question');
+      $question = new ChoiceQuestion(
+        'What is the domain protocol (defaults to http)',
+        ['http', 'https'],
+        0
+      );
+      $question->setErrorMessage('Protocol %s is invalid.');
+      $protocol = $helper->ask($input, $output, $question);
+      return $protocol;
+    }
+    /**
+     * What is the database password.
+     *
+     * @return void
+     */
+    protected function dbpassword($input, $output)
+    {
+      $helper = $this->getHelper('question');
+      $question = new Question('What is the database password');
+      $question->setValidator(function ($answer) {
+        if (!is_string($answer) || strlen($answer) == 0) {
+          throw new \RuntimeException(
+            'Enter a valid database password'
+          );
+        }
+        return $answer;
+      });
+      $dbpassword = $helper->ask($input, $output, $question);
+      return $dbpassword;
+    }
+    /**
+     * Who is the database user.
+     *
+     * @return void
+     */
+    protected function dbuser($input, $output)
+    {
+      $helper = $this->getHelper('question');
+      $question = new Question('Who is the database user', 'root');
+      $question->setValidator(function ($answer) {
+        if (!is_string($answer) || strlen($answer) == 0) {
+          throw new \RuntimeException(
+            'Enter a valid database user'
+          );
+        }
+        return $answer;
+      });
+      $dbname = $helper->ask($input, $output, $question);
+      return $dbname;
+    }
+    /**
+     * What is the database name.
+     *
+     * @return void
+     */
+    protected function dbname($input, $output)
+    {
+      $helper = $this->getHelper('question');
+      $question = new Question('What is the database name');
+      $question->setValidator(function ($answer) {
+        if (!is_string($answer) || strlen($answer) == 0) {
+          throw new \RuntimeException(
+            'Enter a valid database name'
+          );
+        }
+        return $answer;
+      });
+      $dbname = $helper->ask($input, $output, $question);
+      return $dbname;
+    }
+    /**
+     * Which environment is being set up.
      *
      * @return void
      */
@@ -59,20 +167,10 @@ class NewCommand extends Command
         ['development', 'staging', 'production'],
         0
       );
-      $question->setErrorMessage('Environment %s is invalid.');
+      $question->setErrorMessage('Environment %s is invalid');
 
       $environment = $helper->ask($input, $output, $question);
-      $output->writeln('You have just selected: '.$environment);
-
-      /*
-      $working_directory = getcwd().'/'.$name.'/';
-      chdir($working_directory);
-      passthru('mv drupal-master/* .');
-      passthru('mv drupal-master/.editorconfig .editorconfig');
-      passthru('mv drupal-master/.gitignore .gitignore');
-      @rmdir('drupal-master');
-      passthru('source ib3installer');*/
-      return $this;
+      return $environment;
     }
     /**
      * Verify that the website does not already exist.
