@@ -18,10 +18,10 @@ class NewCommand extends Command
      */
     protected function configure()
     {
-        $this
-            ->setName('new')
-            ->setDescription('Create a new ib3 drupal website.')
-            ->addArgument('name', InputArgument::REQUIRED);
+      $this
+        ->setName('new')
+        ->setDescription('Create a new ib3 drupal website.')
+        ->addArgument('name', InputArgument::REQUIRED);
     }
     /**
      * Execute the command.
@@ -32,15 +32,15 @@ class NewCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->verifyWebsiteDoesntExist(
-            $directory = getcwd().'/'.$input->getArgument('name')
-        );
-        $output->writeln('<info>Keep shitting them out...</info>');
-        $this->download($zipFile = $this->makeFilename())
-             ->extract($zipFile, $directory)
-             ->cleanUp($zipFile);
-
-        $output->writeln('<comment>Website ready! Build something.</comment>');
+      $this->verifyWebsiteDoesntExist(
+        $directory = getcwd().'/'.$input->getArgument('name')
+      );
+      $output->writeln('<info>Keep shitting them out...</info>');
+      $this->download($zipFile = $this->makeFilename())
+        ->extract($zipFile, $directory)
+        ->cleanUp($zipFile);
+        ->install();
+      $output->writeln('<comment>Website ready! Build something.</comment>');
     }
     /**
      * Get it installed.
@@ -50,8 +50,9 @@ class NewCommand extends Command
     protected function install()
     {
       exec("mv  ".getcwd()."/drupal-master/* ".getcwd());
-      rmdir(getcwd()."/drupal-master");
+      @rmdir(getcwd()."/drupal-master");
       exec(getcwd().'/. ib3installer');
+      return $this;
     }
     /**
      * Verify that the website does not already exist.
@@ -61,9 +62,9 @@ class NewCommand extends Command
      */
     protected function verifyWebsiteDoesntExist($directory)
     {
-        if (is_dir($directory)) {
-            throw new RuntimeException('Website already exists!');
-        }
+      if (is_dir($directory)) {
+        throw new RuntimeException('Website already exists!');
+      }
     }
     /**
      * Generate a random temporary filename.
@@ -72,7 +73,7 @@ class NewCommand extends Command
      */
     protected function makeFilename()
     {
-        return getcwd().'/ib3_'.md5(time().uniqid()).'.zip';
+      return getcwd().'/ib3_'.md5(time().uniqid()).'.zip';
     }
     /**
      * Download the temporary Zip to the given file.
@@ -82,9 +83,9 @@ class NewCommand extends Command
      */
     protected function download($zipFile)
     {
-        $response = (new Client)->get('https://github.com/ib3ltd/drupal/archive/master.zip');
-        file_put_contents($zipFile, $response->getBody());
-        return $this;
+      $response = (new Client)->get('https://github.com/ib3ltd/drupal/archive/master.zip');
+      file_put_contents($zipFile, $response->getBody());
+      return $this;
     }
     /**
      * Extract the zip file into the given directory.
@@ -95,11 +96,11 @@ class NewCommand extends Command
      */
     protected function extract($zipFile, $directory)
     {
-        $archive = new ZipArchive;
-        $archive->open($zipFile);
-        $archive->extractTo($directory);
-        $archive->close();
-        return $this;
+      $archive = new ZipArchive;
+      $archive->open($zipFile);
+      $archive->extractTo($directory);
+      $archive->close();
+      return $this;
     }
     /**
      * Clean-up the Zip file.
@@ -109,8 +110,8 @@ class NewCommand extends Command
      */
     protected function cleanUp($zipFile)
     {
-        @chmod($zipFile, 0777);
-        @unlink($zipFile);
-        return $this;
+      @chmod($zipFile, 0777);
+      @unlink($zipFile);
+      return $this;
     }
 }
