@@ -38,7 +38,7 @@ class NewCommand extends Command
       $output->writeln('<info>Keep shitting them out...</info>');
       $this->download($zipFile = $this->makeFilename())
         ->extract($zipFile, $directory)
-        ->cleanUp($zipFile);
+        ->cleanUp($zipFile)
         ->install();
       $output->writeln('<comment>Website ready! Build something.</comment>');
     }
