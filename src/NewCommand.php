@@ -5,6 +5,7 @@ use ZipArchive;
 use RuntimeException;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,11 +50,21 @@ class NewCommand extends Command
      */
     protected function install($name)
     {
-      chdir(getcwd().'/'.$name.'/');
-      exec('mv drupal-master/* .');
-      exec('mv drupal-master/.* .');
+      $working_directory = getcwd().'/'.$name.'/';
+      chdir(working_directory);
+      $mv_from_zip = new Process('mv drupal-master/* .', $working_directory);
+      $mv_from_zip->run();
+      $mv_editorconfig_from_zip = new Process('mv drupal-master/.editorconfig .editorconfig', $working_directory);
+      $mv_editorconfig_from_zip->run();
+      $mv_gitignore_from_zip = new Process('mv drupal-master/.gitignore .gitignore', $working_directory);
+      $mv_gitignore_from_zip->run();
       @rmdir('drupal-master');
-      passthru('source ib3installer');
+      $installer = new Process('source ib3installer', $working_directory);
+      $installer->run();
+      //exec('mv drupal-master/* .');
+      //exec('mv drupal-master/.* .');
+      //@rmdir('drupal-master');
+      //passthru('source ib3installer');
       return $this;
     }
     /**
