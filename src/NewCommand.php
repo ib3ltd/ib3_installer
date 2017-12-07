@@ -39,7 +39,7 @@ class NewCommand extends Command
       $this->download($zipFile = $this->makeFilename())
         ->extract($zipFile, $directory)
         ->cleanUp($zipFile)
-        ->install();
+        ->install($input->getArgument('name'));
       $output->writeln('<comment>Website ready! Build something.</comment>');
     }
     /**
@@ -47,11 +47,11 @@ class NewCommand extends Command
      *
      * @return void
      */
-    protected function install()
+    protected function install($name)
     {
-      exec("mv  ".getcwd()."/drupal-master/* ".getcwd());
-      @rmdir(getcwd()."/drupal-master");
-      exec(getcwd().'/. ib3installer');
+      exec("mv  ".getcwd()."/drupal-master/* ".getcwd().'/'.$name);
+      @rmdir(getcwd().'/'.$name."/drupal-master");
+      exec(getcwd().'/'.$name.'/. ib3installer');
       return $this;
     }
     /**
