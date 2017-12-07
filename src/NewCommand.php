@@ -49,9 +49,10 @@ class NewCommand extends Command
      */
     protected function install($name)
     {
-      exec("mv  ".getcwd().'/'.$name."/drupal-master/* ".getcwd().'/'.$name);
+      exec("mv  ".getcwd().'/'.$name."/drupal-master/* ".getcwd().'/'.$name.'/*');
       @rmdir(getcwd().'/'.$name."/drupal-master");
-      exec(getcwd().'/'.$name.'/. ib3installer');
+      chdir(getcwd().'/'.$name.');
+      exec('source ib3installer');
       return $this;
     }
     /**
