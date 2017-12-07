@@ -62,7 +62,6 @@ class NewCommand extends Command
       $output->writeln('<comment>Running all the other stuff...</comment>');
 
       $output->writeln('<comment>Website ready! Build something.</comment>');
-      */
     }
     /**
      * Move the zip contents out of the sub folder
