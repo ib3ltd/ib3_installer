@@ -34,7 +34,7 @@ class NewCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-      $options [
+      $options = [
         'name' => $input->getArgument('name'),
         'environment' => $this->environment($input, $output),
         'dbname' => $this->dbname($input, $output),
@@ -74,8 +74,8 @@ class NewCommand extends Command
         }
         return $answer;
       });
-      $dbpassword = $helper->ask($input, $output, $question);
-      return $dbpassword;
+      $domain = $helper->ask($input, $output, $question);
+      return $domain;
     }
     /**
      * What is the domain protocol.
