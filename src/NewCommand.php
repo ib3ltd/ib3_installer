@@ -53,7 +53,7 @@ class NewCommand extends Command
       exec('mv drupal-master/* .');
       exec('mv drupal-master/.* .');
       @rmdir('drupal-master');
-      exec('source ib3installer');
+      passthru('source ib3installer');
       return $this;
     }
     /**
