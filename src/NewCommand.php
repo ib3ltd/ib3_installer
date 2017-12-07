@@ -53,7 +53,7 @@ class NewCommand extends Command
      */
     protected function environment($input, $output)
     {
-      $this->getHelper('question');
+      $helper = $this->getHelper('question');
       $question = new ChoiceQuestion(
         'Which environment do you wish to install (defaults to development)',
         ['development', 'staging', 'production'],
