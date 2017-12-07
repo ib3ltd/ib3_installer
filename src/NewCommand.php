@@ -13,6 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class NewCommand extends Command
 {
+
+    protected $options;
+
     /**
      * Configure the command options.
      *
@@ -34,17 +37,16 @@ class NewCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-      $options = [
-        'name' => $input->getArgument('name'),
-        'environment' => $this->environment($input, $output),
-        'dbname' => $this->dbname($input, $output),
-        'dbuser' => $this->dbuser($input, $output),
-        'dbpassword' => $this->dbpassword($input, $output),
-        'protocol' => $this->protocol($input, $output),
-        'domain' => $this->domain($input, $output),
-      ];
-
-      var_dump($options);
+      $this->options['name'] = $input->getArgument('name');
+      $this
+        ->environment($input, $ouput)
+        ->dname($input, $output)
+        ->dbuser($input, $output)
+        ->dbpassword($input, $output)
+        ->protocol($input, $output)
+        ->domain($input, $ouput);
+        
+      var_dump($this->options);
       /*
       $this->verifyWebsiteDoesntExist(
         $directory = getcwd().'/'.$input->getArgument('name')
@@ -65,7 +67,7 @@ class NewCommand extends Command
     protected function domain($input, $output)
     {
       $helper = $this->getHelper('question');
-      $question = new Question('What is the domain name (www.example.com)');
+      $question = new Question('What is the domain name (www.example.com): ');
       $question->setValidator(function ($answer) {
         if (!is_string($answer) || strlen($answer) == 0) {
           throw new \RuntimeException(
@@ -74,8 +76,8 @@ class NewCommand extends Command
         }
         return $answer;
       });
-      $domain = $helper->ask($input, $output, $question);
-      return $domain;
+      $this->options['domain'] = $helper->ask($input, $output, $question);
+      return $this;
     }
     /**
      * What is the domain protocol.
@@ -86,13 +88,13 @@ class NewCommand extends Command
     {
       $helper = $this->getHelper('question');
       $question = new ChoiceQuestion(
-        'What is the domain protocol (defaults to http)',
+        'What is the domain protocol (defaults to http): ',
         ['http', 'https'],
         0
       );
       $question->setErrorMessage('Protocol %s is invalid.');
-      $protocol = $helper->ask($input, $output, $question);
-      return $protocol;
+      $this->options['protocol'] = $helper->ask($input, $output, $question);
+      return $this;
     }
     /**
      * What is the database password.
@@ -102,17 +104,9 @@ class NewCommand extends Command
     protected function dbpassword($input, $output)
     {
       $helper = $this->getHelper('question');
-      $question = new Question('What is the database password');
-      $question->setValidator(function ($answer) {
-        if (!is_string($answer) || strlen($answer) == 0) {
-          throw new \RuntimeException(
-            'Enter a valid database password'
-          );
-        }
-        return $answer;
-      });
-      $dbpassword = $helper->ask($input, $output, $question);
-      return $dbpassword;
+      $question = new Question('What is the database password (defaults to [none]): ', '');
+      $this->options['dbpassword'] = $helper->ask($input, $output, $question);
+      return $this;
     }
     /**
      * Who is the database user.
@@ -122,7 +116,7 @@ class NewCommand extends Command
     protected function dbuser($input, $output)
     {
       $helper = $this->getHelper('question');
-      $question = new Question('Who is the database user', 'root');
+      $question = new Question('Who is the database user (defaults to root): ', 'root');
       $question->setValidator(function ($answer) {
         if (!is_string($answer) || strlen($answer) == 0) {
           throw new \RuntimeException(
@@ -131,8 +125,8 @@ class NewCommand extends Command
         }
         return $answer;
       });
-      $dbname = $helper->ask($input, $output, $question);
-      return $dbname;
+      $this->options['dbuser'] = $helper->ask($input, $output, $question);
+      return $this;
     }
     /**
      * What is the database name.
@@ -142,7 +136,7 @@ class NewCommand extends Command
     protected function dbname($input, $output)
     {
       $helper = $this->getHelper('question');
-      $question = new Question('What is the database name');
+      $question = new Question('What is the database name: ');
       $question->setValidator(function ($answer) {
         if (!is_string($answer) || strlen($answer) == 0) {
           throw new \RuntimeException(
@@ -151,8 +145,8 @@ class NewCommand extends Command
         }
         return $answer;
       });
-      $dbname = $helper->ask($input, $output, $question);
-      return $dbname;
+      $this->options['dbname'] = $helper->ask($input, $output, $question);
+      return $this;
     }
     /**
      * Which environment is being set up.
@@ -169,8 +163,8 @@ class NewCommand extends Command
       );
       $question->setErrorMessage('Environment %s is invalid');
 
-      $environment = $helper->ask($input, $output, $question);
-      return $environment;
+      $this->options['environment'] = $helper->ask($input, $output, $question);
+      return $this;
     }
     /**
      * Verify that the website does not already exist.
