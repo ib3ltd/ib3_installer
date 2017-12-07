@@ -39,13 +39,13 @@ class NewCommand extends Command
     {
       $this->options['name'] = $input->getArgument('name');
       $this
-        ->environment($input, $ouput)
+        ->environment($input, $output)
         ->dname($input, $output)
         ->dbuser($input, $output)
         ->dbpassword($input, $output)
         ->protocol($input, $output)
         ->domain($input, $ouput);
-        
+
       var_dump($this->options);
       /*
       $this->verifyWebsiteDoesntExist(
