@@ -5,6 +5,7 @@ use ZipArchive;
 use RuntimeException;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,6 +33,8 @@ class NewCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+      $this->environment($input, $output);
+      /*
       $this->verifyWebsiteDoesntExist(
         $directory = getcwd().'/'.$input->getArgument('name')
       );
@@ -41,21 +44,34 @@ class NewCommand extends Command
         ->cleanUp($zipFile)
         ->install($input->getArgument('name'));
       $output->writeln('<comment>Website ready! Build something.</comment>');
+      */
     }
     /**
      * Get it installed.
      *
      * @return void
      */
-    protected function install($name)
+    protected function environment($input, $output)
     {
+      $this->getHelper('question');
+      $question = new ChoiceQuestion(
+        'Which environment do you wish to install (defaults to development)',
+        ['development', 'staging', 'production'],
+        0
+      );
+      $question->setErrorMessage('Environment %s is invalid.');
+
+      $environment = $helper->ask($input, $output, $question);
+      $output->writeln('You have just selected: '.$environment);
+
+      /*
       $working_directory = getcwd().'/'.$name.'/';
       chdir($working_directory);
       passthru('mv drupal-master/* .');
       passthru('mv drupal-master/.editorconfig .editorconfig');
       passthru('mv drupal-master/.gitignore .gitignore');
       @rmdir('drupal-master');
-      passthru('source ib3installer');
+      passthru('source ib3installer');*/
       return $this;
     }
     /**
