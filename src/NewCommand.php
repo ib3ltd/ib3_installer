@@ -131,7 +131,7 @@ class NewCommand extends Command
     $manipulate = new Manipulate();
     copy(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', '.env.example']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', '.env']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', '.env'])
     );
     $manipulate->updateFile(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', '.env']), ['#VERSION#','#HASH#'], [
       $this->options['environment'],
