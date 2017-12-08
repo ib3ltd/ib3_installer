@@ -108,7 +108,7 @@ class NewCommand extends Command
     */
   protected function cleanup()
   {
-    unlink('.git');
+    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'.git']));
     $manipulate = new Manipulate();
     $manipulate->delTree(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'html','sites']));
     symlink(
@@ -167,11 +167,11 @@ class NewCommand extends Command
 
     copy($example_settings_file, $settings_file);
 
-    $manipulate->updateFile($f, ['#HOST#','#DATABASE#','#USER#','#PASSWORD#'], [
+    $manipulate->updateFile($settings_file, ['#HOST#','#DATABASE#','#USER#','#PASSWORD#'], [
       $this->options['domain'],
       $this->options['dbname'],
       $this->options['dbuser'],
-      $this->options['dbpass']
+      $this->options['dbpassword']
     ]);
 
     copy(
@@ -188,15 +188,15 @@ class NewCommand extends Command
   {
     chdir($this->options['working_directory']);
 
-    rename(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '*']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.'])
+    copy(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory']])
     );
-    rename(
+    copy(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.editorconfig']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.editorconfig'])
     );
-    rename(
+    copy(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.gitignore']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.gitignore'])
     );
