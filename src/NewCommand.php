@@ -10,237 +10,236 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ib3\Installer\Console\Questions;
+use ib3\Installer\Console\Comments;
+use ib3\Installer\Console\Manipulate;
 
 class NewCommand extends Command
 {
 
-    protected $options;
+  protected $options;
 
-    /**
-     * Configure the command options.
-     *
-     * @return void
-     */
-    protected function configure()
-    {
-      $this
-        ->setName('new')
-        ->setDescription('Create a new ib3 drupal website.')
-        ->addArgument('name', InputArgument::REQUIRED);
-    }
-    /**
-     * Execute the command.
-     *
-     * @param  InputInterface  $input
-     * @param  OutputInterface  $output
-     * @return void
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-      $this->options['name'] = $input->getArgument('name');
-      $this
-        ->environment($input, $output)
-        ->dbname($input, $output)
-        ->dbuser($input, $output)
-        ->dbpassword($input, $output)
-        ->protocol($input, $output)
-        ->domain($input, $output);
+  /**
+    * Configure the command options.
+    *
+    * @return void
+    */
+  protected function configure()
+  {
+  $this
+    ->setName('new')
+    ->setDescription('Create a new ib3 drupal website.')
+    ->addArgument('name', InputArgument::REQUIRED);
+  }
+  /**
+    * Execute the command.
+    *
+    * @param  InputInterface  $input
+    * @param  OutputInterface  $output
+    * @return void
+    */
+  protected function execute(InputInterface $input, OutputInterface $output)
+  {
+    $comments = new Comments();
+    $this->setOptions($input, $output);
 
-      $this->options['working_directory'] = getcwd().'/'.$this->options['name'];
+    $output->writeln($comments->begin);
+    $this->verifyWebsiteDoesntExist();
 
-      $output->writeln('<comment>Negotiating bananas with the Monkey Lord...</comment>');
-      $this->verifyWebsiteDoesntExist();
+    $output->writeln($comments->zip);
+    $this->download($zip_file = $this->makeFilename())
+      ->extract($zip_file, $this->options['working_directory'])
+      ->cleanUp($zip_file);
 
-      $output->writeln('<comment>Fetching the thing that does the thing...</comment>');
-      $this->download($zipFile = $this->makeFilename())
-        ->extract($zipFile, $this->options['working_directory'])
-        ->cleanUp($zipFile);
+    $output->writeln($comment->shuffle);
+    $this->moveZipContents();
 
-      $output->writeln('<comment>Moving the stuff that the thing put in the wrong place...</comment>');
-      $this->moveZipContents();
+    $output->writeln($comment->config);
+    $this->siteConfig();
 
-      $output->writeln('<comment>Running all the other stuff...</comment>');
+    $output->writeln($comment->phpunit);
+    $this->updatePhpUnit();
 
-      $output->writeln('<comment>Website ready! Build something.</comment>');
-    }
-    /**
-     * Move the zip contents out of the sub folder
-     *
-     * @return void
-     */
-    protected function moveZipContents()
-    {
-      chdir($this->options['working_directory']);
-      passthru('mv drupal-master/* .');
-      passthru('mv drupal-master/.editorconfig .editorconfig');
-      passthru('mv drupal-master/.gitignore .gitignore');
-      @rmdir('drupal-master');
-    }
-    /**
-     * What is the domain name.
-     *
-     * @return void
-     */
-    protected function domain($input, $output)
-    {
-      $helper = $this->getHelper('question');
-      $question = new Question('What is the domain name (www.example.com): ');
-      $question->setValidator(function ($answer) {
-        if (!is_string($answer) || strlen($answer) == 0) {
-          throw new \RuntimeException(
-            'Enter a valid domain name'
-          );
-        }
-        return $answer;
-      });
-      $this->options['domain'] = $helper->ask($input, $output, $question);
-      return $this;
-    }
-    /**
-     * What is the domain protocol.
-     *
-     * @return void
-     */
-    protected function protocol($input, $output)
-    {
-      $helper = $this->getHelper('question');
-      $question = new ChoiceQuestion(
-        'What is the domain protocol (defaults to http): ',
-        ['http', 'https'],
-        0
-      );
-      $question->setErrorMessage('Protocol %s is invalid.');
-      $this->options['protocol'] = $helper->ask($input, $output, $question);
-      return $this;
-    }
-    /**
-     * What is the database password.
-     *
-     * @return void
-     */
-    protected function dbpassword($input, $output)
-    {
-      $helper = $this->getHelper('question');
-      $question = new Question('What is the database password (defaults to [none]): ', '');
-      $this->options['dbpassword'] = $helper->ask($input, $output, $question);
-      return $this;
-    }
-    /**
-     * Who is the database user.
-     *
-     * @return void
-     */
-    protected function dbuser($input, $output)
-    {
-      $helper = $this->getHelper('question');
-      $question = new Question('Who is the database user (defaults to root): ', 'root');
-      $question->setValidator(function ($answer) {
-        if (!is_string($answer) || strlen($answer) == 0) {
-          throw new \RuntimeException(
-            'Enter a valid database user'
-          );
-        }
-        return $answer;
-      });
-      $this->options['dbuser'] = $helper->ask($input, $output, $question);
-      return $this;
-    }
-    /**
-     * What is the database name.
-     *
-     * @return void
-     */
-    protected function dbname($input, $output)
-    {
-      $helper = $this->getHelper('question');
-      $question = new Question('What is the database name: ');
-      $question->setValidator(function ($answer) {
-        if (!is_string($answer) || strlen($answer) == 0) {
-          throw new \RuntimeException(
-            'Enter a valid database name'
-          );
-        }
-        return $answer;
-      });
-      $this->options['dbname'] = $helper->ask($input, $output, $question);
-      return $this;
-    }
-    /**
-     * Which environment is being set up.
-     *
-     * @return void
-     */
-    protected function environment($input, $output)
-    {
-      $helper = $this->getHelper('question');
-      $question = new ChoiceQuestion(
-        'Which environment do you wish to install (defaults to development)',
-        ['development', 'staging', 'production'],
-        0
-      );
-      $question->setErrorMessage('Environment %s is invalid');
+    $output->writeln($comment->dotenv);
+    $this->updateDotEnv();
 
-      $this->options['environment'] = $helper->ask($input, $output, $question);
-      return $this;
+    $output->writeln($comment->composer);
+    passthru('composer install');
+
+    $output->writeln($comment->npm);
+    passthru('npm install');
+
+    $output->writeln($comment->cleanup);
+    $this->cleanup();
+
+    $output->writeln($comment->finished);
+  }
+  /**
+    * Set the install options
+    *
+    * @return void
+    */
+  protected function setOptions($input, $output)
+  {
+    $questions = new Questions();
+
+    $this->options = [
+      'name' => $input->getArgument('name'),
+      'environment' => $questions->environment($input, $output),
+      'dbname' => $questions->dbname($input, $output),
+      'dbuser' => $questions->dbuser($input, $output),
+      'dbpassword' => $questions->dbpassword($input, $output),
+      'protocol' => $questions->protocol($input, $output),
+      'domain' => $questions->domain($input, $output),
+      'working_directory' => implode(DIRECTORY_SEPARATOR, [getcwd(), $input->getArgument('name')]),
+      'hash' => md5(uniqid(rand(), true)).'_'.md5(uniqid(rand(), true));
+    ];
+
+    $this->options['working_directory'] = implode(DIRECTORY_SEPARATOR, [getcwd(), $this->options['name']]),
+    $this->options['unit'] = $this->options['protocol'].'://'.$this->options['domain'];
+    $this->options['domain'] = '^'.str_replace('.','\.',$this->options['domain']).'$';
+
+  }
+  /**
+    * Cleanup the files
+    *
+    * @return void
+    */
+  protected function cleanup()
+  {
+    unlink('.git');
+    $manipulate = new Manipulate();
+    $manipulate->delTree('html/sites');
+    symlink(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'sites']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'html','sites'])
+    );
+    unlink('sites/default/default.services.yml');
+    unlink('sites/default/default.settings.php');
+    unlink('sites/development.services.yml');
+    unlink('sites/example.settings.local.php');
+    unlink('sites/example.sites.php');
+  }
+  /**
+    * Config the .env settings
+    *
+    * @return void
+    */
+  protected function updateDotEnv()
+  {
+    $manipulate = new Manipulate();
+    copy('sites/.env.example', 'sites/.env');
+    $manipulate->updateFile('sites/.env', ['#VERSION#','#HASH#'], [
+      $this->options['environment'],
+      $this->options['hash']
+    ]);
+  }
+  /**
+    * Config the site settings
+    *
+    * @return void
+    */
+  protected function updatePhpUnit()
+  {
+    $manipulate = new Manipulate();
+    copy('phpunit.example.xml', 'phpunit.xml');
+    $manipulate->updateFile('phpunit.xml', '#UNIT#', $this->options['unit']);
+  }
+  /**
+    * Update phpunit
+    *
+    * @return void
+    */
+  protected function siteConfig()
+  {
+    $manipulate = new Manipulate();
+
+    $settings_directory = implode(DIRECTORY_SEPARATOR, ['sites', $this->options['environment']]);
+    $example_settings_file = implode(DIRECTORY_SEPARATOR, [$settings_directory, 'settings.example.php']);
+    $settings_file = implode(DIRECTORY_SEPARATOR, [$settings_directory, 'settings.php']);
+
+    copy($example_settings_file, $settings_file);
+
+    $manipulate->updateFile($f, ['#HOST#','#DATABASE#','#USER#','#PASSWORD#'], [
+      $this->options['domain'],
+      $this->options['dbname'],
+      $this->options['dbuser'],
+      $this->options['dbpass']
+    ]);
+
+    copy('sites/default/settings.example.php', 'sites/default/settings.php');
+  }
+  /**
+    * Move the zip contents out of the sub folder
+    *
+    * @return void
+    */
+  protected function moveZipContents()
+  {
+    chdir($this->options['working_directory']);
+    rename('mv drupal-master/*', '.');
+    rename('mv drupal-master/.editorconfig', '.editorconfig');
+    rename('mv drupal-master/.gitignore', '.gitignore');
+    @rmdir('drupal-master');
+  }
+  /**
+    * Verify that the website does not already exist.
+    *
+    * @param  string  $directory
+    * @return void
+    */
+  protected function verifyWebsiteDoesntExist()
+  {
+    if (is_dir($this->options['working_directory'])) {
+      throw new RuntimeException('Website already exists!');
     }
-    /**
-     * Verify that the website does not already exist.
-     *
-     * @param  string  $directory
-     * @return void
-     */
-    protected function verifyWebsiteDoesntExist()
-    {
-      if (is_dir($this->options['working_directory'])) {
-        throw new RuntimeException('Website already exists!');
-      }
-    }
-    /**
-     * Generate a random temporary filename.
-     *
-     * @return string
-     */
-    protected function makeFilename()
-    {
-      return getcwd().'/ib3_'.md5(time().uniqid()).'.zip';
-    }
-    /**
-     * Download the temporary Zip to the given file.
-     *
-     * @param  string  $zipFile
-     * @return $this
-     */
-    protected function download($zipFile)
-    {
-      $response = (new Client)->get('https://github.com/ib3ltd/drupal/archive/master.zip');
-      file_put_contents($zipFile, $response->getBody());
-      return $this;
-    }
-    /**
-     * Extract the zip file into the given directory.
-     *
-     * @param  string  $zipFile
-     * @param  string  $directory
-     * @return $this
-     */
-    protected function extract($zipFile, $directory)
-    {
-      $archive = new ZipArchive;
-      $archive->open($zipFile);
-      $archive->extractTo($directory);
-      $archive->close();
-      return $this;
-    }
-    /**
-     * Clean-up the Zip file.
-     *
-     * @param  string  $zipFile
-     * @return $this
-     */
-    protected function cleanUp($zipFile)
-    {
-      @chmod($zipFile, 0777);
-      @unlink($zipFile);
-      return $this;
-    }
+  }
+  /**
+    * Generate a random temporary filename.
+    *
+    * @return string
+    */
+  protected function makeFilename()
+  {
+    return getcwd().'/ib3_'.md5(time().uniqid()).'.zip';
+  }
+  /**
+    * Download the temporary Zip to the given file.
+    *
+    * @param  string  $zipFile
+    * @return $this
+    */
+  protected function download($zip_file)
+  {
+    $response = (new Client)->get('https://github.com/ib3ltd/drupal/archive/master.zip');
+    file_put_contents($zip_file, $response->getBody());
+    return $this;
+  }
+  /**
+    * Extract the zip file into the given directory.
+    *
+    * @param  string  $zipFile
+    * @param  string  $directory
+    * @return $this
+    */
+  protected function extract($zip_file, $directory)
+  {
+    $archive = new ZipArchive;
+    $archive->open($zip_file);
+    $archive->extractTo($directory);
+    $archive->close();
+    return $this;
+  }
+  /**
+    * Clean-up the Zip file.
+    *
+    * @param  string  $zipFile
+    * @return $this
+    */
+  protected function cleanUp($zip_file)
+  {
+    @chmod($zip_file, 0777);
+    @unlink($zip_file);
+    return $this;
+  }
 }
