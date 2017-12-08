@@ -92,7 +92,7 @@ class NewCommand extends Command
       'protocol' => $questions->protocol($input, $output),
       'domain' => $questions->domain($input, $output),
       'working_directory' => implode(DIRECTORY_SEPARATOR, [getcwd(), $input->getArgument('name')]),
-      'hash' => md5(uniqid(rand(), true)).'_'.md5(uniqid(rand(), true));
+      'hash' => md5(uniqid(rand(), true)).'_'.md5(uniqid(rand(), true)),
     ];
 
     $this->options['working_directory'] = implode(DIRECTORY_SEPARATOR, [getcwd(), $this->options['name']]),
