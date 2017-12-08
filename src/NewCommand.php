@@ -187,10 +187,20 @@ class NewCommand extends Command
   protected function moveZipContents()
   {
     chdir($this->options['working_directory']);
-    rename('drupal-master/*', '.');
-    rename('drupal-master/.editorconfig', '.editorconfig');
-    rename('drupal-master/.gitignore', '.gitignore');
-    @rmdir('drupal-master');
+
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '*']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.editorconfig']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.editorconfig'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.gitignore']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.gitignore'])
+    );
+    @rmdir(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master']));
   }
   /**
     * Verify that the website does not already exist.
