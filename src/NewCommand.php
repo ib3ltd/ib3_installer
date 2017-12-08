@@ -195,10 +195,6 @@ class NewCommand extends Command
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html'])
     );
     rename(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'ib3installer']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'ib3installer'])
-    );
-    rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'package.json']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'package.json'])
     );
@@ -217,10 +213,6 @@ class NewCommand extends Command
     rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'tests']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'tests'])
-    );
-    rename(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'bin']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'bin'])
     );
     rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.editorconfig']),
