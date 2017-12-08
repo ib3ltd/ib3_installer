@@ -1,31 +1,16 @@
 <?php
 namespace ib3\Installer\Console;
 
-
 class Comments
 {
-  public $begin;
-  public $zip;
-  public $shuffle;
-  public $config;
-  public $phpunit;
-  public $dotenv;
-  public $composer;
-  public $npm;
-  public $cleanup;
-  public $finished;
-
-  function __construct()
-  {
-    $begin = '<comment>Negotiating bananas with the Monkey Lord...</comment>';
-    $zip = '<comment>Fetching the master zip from github...</comment>';
-    $shuffle = '<comment>Moving the zip contents to the correct folder...</comment>';
-    $config = '<comment>Updating the site config file...</comment>';
-    $phpunit = '<comment>Updating phpunit references...</comment>';
-    $dotenv = '<comment>Updating the .env references...</comment>';
-    $composer = '<comment>Installing the composer dependencies...</comment>';
-    $npm = '<comment>Installing the npm dependencies...</comment>';
-    $cleanup = '<comment>Cleaning up the files...</comment>';
-    $finished = '<comment>Lovely Stuff! Now build something.</comment>';
-  }
+    public $begin = '<info>Negotiating bananas with the Monkey Lord...</info>';
+    public $zip = '<info>Fetching the master zip from github...</info>';
+    public $shuffle = '<info>Moving the zip contents to the correct folder...</info>';
+    public $config = '<info>Updating the site config file...</info>';
+    public $phpunit = '<info>Updating phpunit references...</info>';
+    public $dotenv = '<info>Updating the .env references...</info>';
+    public $composer = '<info>Installing the composer dependencies...</info>';
+    public $npm = '<info>Installing the npm dependencies...</info>';
+    public $cleanup = '<info>Cleaning up the files...</info>';
+    public $finished = '<info>Lovely Stuff! Now build something.</info>';
 }

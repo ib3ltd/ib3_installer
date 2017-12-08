@@ -108,18 +108,12 @@ class NewCommand extends Command
     */
   protected function cleanup()
   {
-    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.git']));
     $manipulate = new Manipulate();
     $manipulate->delTree(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html', 'sites']));
     symlink(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html', 'sites'])
     );
-    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'default', 'default.services.yml']));
-    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'default', 'default.settings.php']));
-    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'development.services.yml']));
-    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'example.settings.local.php']));
-    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'example.sites.php']));
   }
   /**
     * Config the .env settings
