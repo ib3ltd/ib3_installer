@@ -6,9 +6,9 @@ class Manipulate
 {
   public function updateFile($file, $search, $replace)
   {
-    $f = file_get_contents($file);
-    $f = str_replace($search, $replace);
-    file_put_contents($f);
+    $str= file_get_contents($file);
+    $str = str_replace($search, $replace, $str);
+    file_put_contents($file, $str);
   }
 
   public function delTree($dir)
