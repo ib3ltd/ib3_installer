@@ -192,11 +192,51 @@ class NewCommand extends Command
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory']])
     );
-    copy(
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'composer.json']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'composer.json'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'gulpfile.js']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'gulpfile.js'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'html']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'ib3installer']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'ib3installer'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'package.json']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'package.json'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'phpunit.example.xml']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'phpunit.example.xml'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'sites']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'sync']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sync'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'tests']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'tests'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'bin']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'bin'])
+    );
+    rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.editorconfig']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.editorconfig'])
     );
-    copy(
+    rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.gitignore']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.gitignore'])
     );
