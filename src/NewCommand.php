@@ -188,10 +188,6 @@ class NewCommand extends Command
   {
     chdir($this->options['working_directory']);
 
-    copy(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory']])
-    );
     rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'composer.json']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'composer.json'])
