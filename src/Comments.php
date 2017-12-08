@@ -4,16 +4,16 @@ namespace ib3\Installer\Console;
 
 class Comments
 {
-  protected $begin;
-  protected $zip;
-  protected $shuffle;
-  protected $config;
-  protected $phpunit;
-  protected $dotenv;
-  protected $composer;
-  protected $npm;
-  protected $cleanup;
-  protected $finished;
+  public $begin;
+  public $zip;
+  public $shuffle;
+  public $config;
+  public $phpunit;
+  public $dotenv;
+  public $composer;
+  public $npm;
+  public $cleanup;
+  public $finished;
 
   function __construct()
   {

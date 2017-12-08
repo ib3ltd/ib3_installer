@@ -13,7 +13,7 @@ class Questions
     *
     * @return void
     */
-  protected function domain($input, $output)
+  public function domain($input, $output)
   {
     $helper = $this->getHelper('question');
     $question = new Question('What is the domain name (www.example.com): ');
@@ -32,7 +32,7 @@ class Questions
     *
     * @return void
     */
-  protected function protocol($input, $output)
+  public function protocol($input, $output)
   {
     $helper = $this->getHelper('question');
     $question = new ChoiceQuestion(
@@ -48,7 +48,7 @@ class Questions
     *
     * @return void
     */
-  protected function dbpassword($input, $output)
+  public function dbpassword($input, $output)
   {
     $helper = $this->getHelper('question');
     $question = new Question('What is the database password (defaults to [none]): ', '');
@@ -59,7 +59,7 @@ class Questions
     *
     * @return void
     */
-  protected function dbuser($input, $output)
+  public function dbuser($input, $output)
   {
     $helper = $this->getHelper('question');
     $question = new Question('Who is the database user (defaults to root): ', 'root');
@@ -76,7 +76,7 @@ class Questions
     *
     * @return void
     */
-  protected function dbname($input, $output)
+  public function dbname($input, $output)
   {
     $helper = $this->getHelper('question');
     $question = new Question('What is the database name: ');
@@ -93,7 +93,7 @@ class Questions
     *
     * @return void
     */
-  protected function environment($input, $output)
+  public function environment($input, $output)
   {
     $helper = $this->getHelper('question');
     $question = new ChoiceQuestion(
