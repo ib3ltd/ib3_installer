@@ -108,12 +108,12 @@ class NewCommand extends Command
     */
   protected function cleanup()
   {
-    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'.git']));
+    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.git']));
     $manipulate = new Manipulate();
-    $manipulate->delTree(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'html','sites']));
+    $manipulate->delTree(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html', 'sites']));
     symlink(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'sites']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'html','sites'])
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html', 'sites'])
     );
     unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'default', 'default.services.yml']));
     unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'default', 'default.settings.php']));
@@ -175,8 +175,8 @@ class NewCommand extends Command
     ]);
 
     copy(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites'. 'default', 'settings.example.php']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites'. 'default', 'settings.php'])
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'default', 'settings.example.php']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'default', 'settings.php'])
     );
   }
   /**
