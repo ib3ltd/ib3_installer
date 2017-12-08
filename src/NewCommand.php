@@ -82,15 +82,16 @@ class NewCommand extends Command
   protected function setOptions($input, $output)
   {
     $questions = new Questions();
+    $helper = $this->getHelper('question');
 
     $this->options = [
       'name' => $input->getArgument('name'),
-      'environment' => $questions->environment($input, $output),
-      'dbname' => $questions->dbname($input, $output),
-      'dbuser' => $questions->dbuser($input, $output),
-      'dbpassword' => $questions->dbpassword($input, $output),
-      'protocol' => $questions->protocol($input, $output),
-      'domain' => $questions->domain($input, $output),
+      'environment' => $questions->environment($input, $output, $helper),
+      'dbname' => $questions->dbname($input, $output, $helper),
+      'dbuser' => $questions->dbuser($input, $output, $helper),
+      'dbpassword' => $questions->dbpassword($input, $output, $helper),
+      'protocol' => $questions->protocol($input, $output, $helper),
+      'domain' => $questions->domain($input, $output, $helper),
       'working_directory' => implode(DIRECTORY_SEPARATOR, [getcwd(), $input->getArgument('name')]),
       'hash' => md5(uniqid(rand(), true)).'_'.md5(uniqid(rand(), true)),
     ];

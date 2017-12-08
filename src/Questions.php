@@ -13,9 +13,8 @@ class Questions
     *
     * @return void
     */
-  public function domain($input, $output)
+  public function domain($input, $output, $helper)
   {
-    $helper = $this->getHelper('question');
     $question = new Question('What is the domain name (www.example.com): ');
     $question->setValidator(function ($answer) {
       if (!is_string($answer) || strlen($answer) == 0) {
@@ -32,9 +31,8 @@ class Questions
     *
     * @return void
     */
-  public function protocol($input, $output)
+  public function protocol($input, $output, $helper)
   {
-    $helper = $this->getHelper('question');
     $question = new ChoiceQuestion(
       'What is the domain protocol (defaults to http): ',
       ['http', 'https'],
@@ -48,9 +46,8 @@ class Questions
     *
     * @return void
     */
-  public function dbpassword($input, $output)
+  public function dbpassword($input, $output, $helper)
   {
-    $helper = $this->getHelper('question');
     $question = new Question('What is the database password (defaults to [none]): ', '');
     return $helper->ask($input, $output, $question);
   }
@@ -59,9 +56,8 @@ class Questions
     *
     * @return void
     */
-  public function dbuser($input, $output)
+  public function dbuser($input, $output, $helper)
   {
-    $helper = $this->getHelper('question');
     $question = new Question('Who is the database user (defaults to root): ', 'root');
     $question->setValidator(function ($answer) {
       if (!is_string($answer) || strlen($answer) == 0) {
@@ -76,9 +72,8 @@ class Questions
     *
     * @return void
     */
-  public function dbname($input, $output)
+  public function dbname($input, $output, $helper)
   {
-    $helper = $this->getHelper('question');
     $question = new Question('What is the database name: ');
     $question->setValidator(function ($answer) {
       if (!is_string($answer) || strlen($answer) == 0) {
@@ -93,9 +88,8 @@ class Questions
     *
     * @return void
     */
-  public function environment($input, $output)
+  public function environment($input, $output, $helper)
   {
-    $helper = $this->getHelper('question');
     $question = new ChoiceQuestion(
       'Which environment do you wish to install (defaults to development)',
       ['development', 'staging', 'production'],
