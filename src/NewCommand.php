@@ -49,7 +49,7 @@ class NewCommand extends Command
     $output->writeln($comments->zip);
     $this->download($zip_file = $this->makeFilename())
       ->extract($zip_file, $this->options['working_directory'])
-      ->cleanUp($zip_file);
+      ->removeZip($zip_file);
 
     $output->writeln($comment->shuffle);
     $this->moveZipContents();
@@ -236,7 +236,7 @@ class NewCommand extends Command
     * @param  string  $zipFile
     * @return $this
     */
-  protected function cleanUp($zip_file)
+  protected function removeZip($zip_file)
   {
     @chmod($zip_file, 0777);
     @unlink($zip_file);
