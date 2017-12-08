@@ -95,7 +95,7 @@ class NewCommand extends Command
       'hash' => md5(uniqid(rand(), true)).'_'.md5(uniqid(rand(), true)),
     ];
 
-    $this->options['working_directory'] = implode(DIRECTORY_SEPARATOR, [getcwd(), $this->options['name']]),
+    $this->options['working_directory'] = implode(DIRECTORY_SEPARATOR, [getcwd(), $this->options['name']]);
     $this->options['unit'] = $this->options['protocol'].'://'.$this->options['domain'];
     $this->options['domain'] = '^'.str_replace('.','\.',$this->options['domain']).'$';
 
