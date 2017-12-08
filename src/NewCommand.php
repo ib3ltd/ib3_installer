@@ -51,28 +51,28 @@ class NewCommand extends Command
       ->extract($zip_file, $this->options['working_directory'])
       ->removeZip($zip_file);
 
-    $output->writeln($comment->shuffle);
+    $output->writeln($comments->shuffle);
     $this->moveZipContents();
 
-    $output->writeln($comment->config);
+    $output->writeln($comments->config);
     $this->siteConfig();
 
-    $output->writeln($comment->phpunit);
+    $output->writeln($comments->phpunit);
     $this->updatePhpUnit();
 
-    $output->writeln($comment->dotenv);
+    $output->writeln($comments->dotenv);
     $this->updateDotEnv();
 
-    $output->writeln($comment->composer);
+    $output->writeln($comments->composer);
     passthru('composer install');
 
-    $output->writeln($comment->npm);
+    $output->writeln($comments->npm);
     passthru('npm install');
 
-    $output->writeln($comment->cleanup);
+    $output->writeln($comments->cleanup);
     $this->cleanup();
 
-    $output->writeln($comment->finished);
+    $output->writeln($comments->finished);
   }
   /**
     * Set the install options
@@ -110,16 +110,16 @@ class NewCommand extends Command
   {
     unlink('.git');
     $manipulate = new Manipulate();
-    $manipulate->delTree('html/sites');
+    $manipulate->delTree(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'html','sites']));
     symlink(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'sites']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'],'html','sites'])
     );
-    unlink('sites/default/default.services.yml');
-    unlink('sites/default/default.settings.php');
-    unlink('sites/development.services.yml');
-    unlink('sites/example.settings.local.php');
-    unlink('sites/example.sites.php');
+    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'default', 'default.services.yml']));
+    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'default', 'default.settings.php']));
+    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'development.services.yml']));
+    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'example.settings.local.php']));
+    unlink(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', 'example.sites.php']));
   }
   /**
     * Config the .env settings
@@ -129,8 +129,11 @@ class NewCommand extends Command
   protected function updateDotEnv()
   {
     $manipulate = new Manipulate();
-    copy('sites/.env.example', 'sites/.env');
-    $manipulate->updateFile('sites/.env', ['#VERSION#','#HASH#'], [
+    copy(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', '.env.example']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', '.env']),
+    );
+    $manipulate->updateFile(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', '.env']), ['#VERSION#','#HASH#'], [
       $this->options['environment'],
       $this->options['hash']
     ]);
@@ -143,8 +146,11 @@ class NewCommand extends Command
   protected function updatePhpUnit()
   {
     $manipulate = new Manipulate();
-    copy('phpunit.example.xml', 'phpunit.xml');
-    $manipulate->updateFile('phpunit.xml', '#UNIT#', $this->options['unit']);
+    copy(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'phpunit.example.xml']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'phpunit.xml'])
+    );
+    $manipulate->updateFile(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'phpunit.xml']), '#UNIT#', $this->options['unit']);
   }
   /**
     * Update phpunit
@@ -155,7 +161,7 @@ class NewCommand extends Command
   {
     $manipulate = new Manipulate();
 
-    $settings_directory = implode(DIRECTORY_SEPARATOR, ['sites', $this->options['environment']]);
+    $settings_directory = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites', $this->options['environment']]);
     $example_settings_file = implode(DIRECTORY_SEPARATOR, [$settings_directory, 'settings.example.php']);
     $settings_file = implode(DIRECTORY_SEPARATOR, [$settings_directory, 'settings.php']);
 
@@ -168,7 +174,10 @@ class NewCommand extends Command
       $this->options['dbpass']
     ]);
 
-    copy('sites/default/settings.example.php', 'sites/default/settings.php');
+    copy(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites'. 'default', 'settings.example.php']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites'. 'default', 'settings.php'])
+    );
   }
   /**
     * Move the zip contents out of the sub folder
@@ -178,9 +187,9 @@ class NewCommand extends Command
   protected function moveZipContents()
   {
     chdir($this->options['working_directory']);
-    rename('mv drupal-master/*', '.');
-    rename('mv drupal-master/.editorconfig', '.editorconfig');
-    rename('mv drupal-master/.gitignore', '.gitignore');
+    rename('drupal-master/*', '.');
+    rename('drupal-master/.editorconfig', '.editorconfig');
+    rename('drupal-master/.gitignore', '.gitignore');
     @rmdir('drupal-master');
   }
   /**
