@@ -9,6 +9,21 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 class Questions
 {
   /**
+    * What is the local machine.
+    *
+    * @return void
+    */
+  public function local($input, $output, $helper)
+  {
+    $question = new ChoiceQuestion(
+      'What is your local machine (defaults to windows): ',
+      ['windows', 'mac'],
+      0
+    );
+    $question->setErrorMessage('Local machine %s is invalid.');
+    return $helper->ask($input, $output, $question);
+  }
+  /**
     * What is the domain name.
     *
     * @return void

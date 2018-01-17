@@ -63,6 +63,10 @@ class NewCommand extends Command
     $output->writeln($comments->dotenv);
     $this->updateDotEnv();
 
+    $output->writeln($comments->vagrant);
+    $this->updateVagrant();
+    passthru('vagrant up');
+
     $output->writeln($comments->composer);
     passthru('composer install');
 
@@ -86,6 +90,7 @@ class NewCommand extends Command
 
     $this->options = [
       'name' => $input->getArgument('name'),
+      'local' => $questions->local($input, $output, $helper),
       'environment' => $questions->environment($input, $output, $helper),
       'dbname' => $questions->dbname($input, $output, $helper),
       'dbuser' => $questions->dbuser($input, $output, $helper),
@@ -98,6 +103,7 @@ class NewCommand extends Command
 
     $this->options['working_directory'] = implode(DIRECTORY_SEPARATOR, [getcwd(), $this->options['name']]);
     $this->options['unit'] = $this->options['protocol'].'://'.$this->options['domain'];
+    $this->options['dom'] = $this->options['domain'];
     $this->options['domain'] = '^'.str_replace('.','\.',$this->options['domain']).'$';
 
   }
@@ -145,6 +151,29 @@ class NewCommand extends Command
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'phpunit.xml'])
     );
     $manipulate->updateFile(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'phpunit.xml']), '#UNIT#', $this->options['unit']);
+  }
+  /**
+    * Config vagrant
+    *
+    * @return void
+    */
+  protected function updateVagrant()
+  {
+    $manipulate = new Manipulate();
+    $vagrant_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config.xml'];
+    $example_vagrant_osx_file = implode(DIRECTORY_SEPARATOR, [$settings_directory, 'vagrant-config-local.yaml.osx']);
+    $vagrant_osx_file = implode(DIRECTORY_SEPARATOR, [$settings_directory, 'vagrant-config-local.yaml']);
+
+    $manipulate->updateFile($vagrant_file, ['#HOST#','#DATABASE#','#USER#','#PASSWORD#'], [
+      $this->options['dom'],
+      $this->options['dbname'],
+      $this->options['dbuser'],
+      $this->options['dbpassword']
+    ]);
+
+    if ($this->options['local'] = 'osx') {
+      copy($example_vagrant_osx_file, $vagrant_osx_file);
+    }
   }
   /**
     * Update phpunit
