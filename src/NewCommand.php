@@ -160,7 +160,7 @@ class NewCommand extends Command
   protected function updateVagrant()
   {
     $manipulate = new Manipulate();
-    $vagrant_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config.xml'];
+    $vagrant_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config.xml']);
     $example_vagrant_osx_file = implode(DIRECTORY_SEPARATOR, [$settings_directory, 'vagrant-config-local.yaml.osx']);
     $vagrant_osx_file = implode(DIRECTORY_SEPARATOR, [$settings_directory, 'vagrant-config-local.yaml']);
 
