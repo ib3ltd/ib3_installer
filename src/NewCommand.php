@@ -63,15 +63,15 @@ class NewCommand extends Command
     $output->writeln($comments->dotenv);
     $this->updateDotEnv();
 
-    $output->writeln($comments->vagrant);
-    $this->updateVagrant();
-    passthru('vagrant up');
-
     $output->writeln($comments->composer);
     passthru('composer install');
 
     $output->writeln($comments->npm);
     passthru('npm install');
+
+    $output->writeln($comments->vagrant);
+    $this->updateVagrant();
+    passthru('vagrant up');
 
     $output->writeln($comments->cleanup);
     $this->cleanup();
@@ -160,7 +160,7 @@ class NewCommand extends Command
   protected function updateVagrant()
   {
     $manipulate = new Manipulate();
-    
+
     $vagrant_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config.yaml']);
     $example_vagrant_osx_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config-local.yaml.osx']);
     $vagrant_osx_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config-local.yaml']);
