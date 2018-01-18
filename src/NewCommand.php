@@ -244,8 +244,24 @@ class NewCommand extends Command
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'tests'])
     );
     rename(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.editorconfig']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.editorconfig'])
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'vagrant']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'vagrant-config.yaml']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config.yaml'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'vagrant-config-local.yaml.osx']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config-local.yaml.osx'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'Vagrantfile']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'Vagrantfile'])
+    );
+    rename(
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.gitignore']),
+      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.gitignore'])
     );
     rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.gitignore']),
