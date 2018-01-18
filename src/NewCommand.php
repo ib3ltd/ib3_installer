@@ -263,10 +263,6 @@ class NewCommand extends Command
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.gitignore']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.gitignore'])
     );
-    rename(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', '.gitignore']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], '.gitignore'])
-    );
     @rmdir(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master']));
   }
   /**
