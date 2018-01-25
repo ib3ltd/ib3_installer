@@ -170,10 +170,6 @@ class NewCommand extends Command
       $this->options['dbuser'],
       $this->options['dbpassword']
     ]);
-
-    if ($this->options['local'] = 'osx') {
-      copy($example_vagrant_osx_file, $vagrant_osx_file);
-    }
   }
   /**
     * Update phpunit
@@ -250,10 +246,6 @@ class NewCommand extends Command
     rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'vagrant-config.yaml']),
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config.yaml'])
-    );
-    rename(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'vagrant-config-local.yaml.osx']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config-local.yaml.osx'])
     );
     rename(
       implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'drupal-master', 'Vagrantfile']),
