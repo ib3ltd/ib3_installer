@@ -90,7 +90,6 @@ class NewCommand extends Command
 
     $this->options = [
       'name' => $input->getArgument('name'),
-      'local' => $questions->local($input, $output, $helper),
       'environment' => $questions->environment($input, $output, $helper),
       'dbname' => $questions->dbname($input, $output, $helper),
       'dbuser' => $questions->dbuser($input, $output, $helper),
@@ -106,16 +105,6 @@ class NewCommand extends Command
     $this->options['dom'] = $this->options['domain'];
     $this->options['domain'] = '^'.str_replace('.','\.',$this->options['domain']).'$';
 
-  }
-  /**
-    * Cleanup the files
-    *
-    * @return void
-    */
-  protected function cleanup()
-  {
-    $manipulate = new Manipulate();
-    $manipulate->delTree(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html', 'sites']));
   }
   /**
     * Config the .env settings
