@@ -115,11 +115,7 @@ class NewCommand extends Command
   protected function cleanup()
   {
     $manipulate = new Manipulate();
-    $manipulate->delTree(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html', 'sites']));
-    symlink(
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'sites']),
-      implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html', 'sites'])
-    );
+    $manipulate->delTree(implode(DIRECTORY_SEPARATOR, ['var', 'www', 'vhosts', $this->options['dom'], 'html', 'sites']));
   }
   /**
     * Config the .env settings
@@ -161,8 +157,6 @@ class NewCommand extends Command
   {
     $manipulate = new Manipulate();
     $vagrant_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config.yaml']);
-    $example_vagrant_osx_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config-local.yaml.osx']);
-    $vagrant_osx_file = implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'vagrant-config-local.yaml']);
 
     $manipulate->updateFile($vagrant_file, ['#HOST#','#DATABASE#','#USER#','#PASSWORD#'], [
       $this->options['dom'],
