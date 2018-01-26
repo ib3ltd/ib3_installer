@@ -73,9 +73,6 @@ class NewCommand extends Command
     $this->updateVagrant();
     passthru('vagrant up');
 
-    $output->writeln($comments->cleanup);
-    $this->cleanup();
-
     $output->writeln($comments->finished);
   }
   /**
