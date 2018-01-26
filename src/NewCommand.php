@@ -115,7 +115,7 @@ class NewCommand extends Command
   protected function cleanup()
   {
     $manipulate = new Manipulate();
-    $manipulate->delTree(DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, ['var', 'www', 'vhosts', $this->options['dom'], 'html', 'sites']));
+    $manipulate->delTree(implode(DIRECTORY_SEPARATOR, [$this->options['working_directory'], 'html', 'sites']));
   }
   /**
     * Config the .env settings
